@@ -108,6 +108,16 @@ class Tx:
         '''Takes a byte stream and parses the transaction at the start
         return a Tx object
         '''
+        version = little_endian_to_int(s.read(4))
+
+        return cls(
+            version=version,
+            tx_ins=[],
+            tx_outs=[],
+            locktime=0,
+            testnet=testnet
+        )
+
         # s.read(n) will return n bytes
         # version is an integer in 4 bytes, little-endian
         # num_inputs is a varint, use read_varint(s)
@@ -116,7 +126,7 @@ class Tx:
         # parse num_outputs number of TxOuts
         # locktime is an integer in 4 bytes, little-endian
         # return an instance of the class (see __init__ for args)
-        raise NotImplementedError
+        # raise NotImplementedError
 
     # tag::source6[]
     def serialize(self):
