@@ -126,12 +126,14 @@ class Tx:
             tx_out = TxOut.parse(s)
             tx_outs.append(tx_out)
 
+        locktime = little_endian_to_int(s.read(4))
+
 
         return cls(
             version=version,
             tx_ins=tx_ins,
             tx_outs=tx_outs,
-            locktime=0,
+            locktime=locktime,
             testnet=testnet
         )
         # s.read(n) will return n bytes
