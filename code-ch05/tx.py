@@ -118,11 +118,19 @@ class Tx:
             tx_in = TxIn.parse(s)
             tx_ins.append(tx_in)
 
+        num_outputs = read_varint(s)
+
+        tx_outs = []
+
+        for _ in range(num_outputs):
+            tx_out = TxOut.parse(s)
+            tx_outs.append(tx_out)
+
 
         return cls(
             version=version,
             tx_ins=tx_ins,
-            tx_outs=[],
+            tx_outs=tx_outs,
             locktime=0,
             testnet=testnet
         )
@@ -249,10 +257,18 @@ class TxOut:
         '''Takes a byte stream and parses the tx_output at the start
         return a TxOut object
         '''
+
+        amount = little_endian_to_int(s.read(8))
+
+        script_pubkey = Script.parse(s)
+
+        return cls(
+            amount,
+            script_pubkey
+        )
         # amount is an integer in 8 bytes, little endian
         # use Script.parse to get the ScriptPubKey
         # return an instance of the class (see __init__ for args)
-        raise NotImplementedError
 
     # tag::source4[]
     def serialize(self):  # <1>
