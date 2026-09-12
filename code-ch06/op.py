@@ -684,8 +684,8 @@ def op_checksig(stack, z):
         stack.append(encode_num(1))
     else:
         stack.append(encode_num(0))
-    
-    raise NotImplementedError
+
+    return True
 
 
 def op_checksigverify(stack, z):
