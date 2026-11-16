@@ -108,7 +108,10 @@ class Block:
         # get the hash256 of the serialization of this block
         # interpret this hash as a little-endian number
         # return whether this integer is less than the target
-        raise NotImplementedError
+        sha = hash256(self.serialize())
+        proof = little_endian_to_int(sha)
+        return proof < self.target()
+        # raise NotImplementedError
 
 
 class BlockTest(TestCase):
