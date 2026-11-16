@@ -51,13 +51,21 @@ class NetworkEnvelope:
         if magic != expected_magic:
             raise RuntimeError('magic is not right {} vs {}'.format(magic.hex(), expected_magic.hex()))
         # command 12 bytes
+        command = s.read(12)
         # strip the trailing 0's
+        command = command.rstrip(b'\x00')
         # payload length 4 bytes, little endian
+        payload_length = little_endian_to_int(s.read(4))
         # checksum 4 bytes, first four of hash256 of payload
+        checksum = s.read(4)
         # payload is of length payload_length
+        payload = s.read(payload_length)
         # verify checksum
+        if hash256(payload)[:4] != checksum:
+            raise RuntimeError('checksum is not right')
         # return an instance of the class
-        raise NotImplementedError
+        return cls(command, payload)
+        # raise NotImplementedError
 
     def serialize(self):
         '''Returns the byte serialization of the entire network message'''
