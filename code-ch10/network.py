@@ -316,9 +316,13 @@ class SimpleNode:
         '''Do a handshake with the other node.
         Handshake is sending a version message and getting a verack back.'''
         # create a version message
+        version_message = VersionMessage()
         # send the command
+        self.send(version_message)
         # wait for a verack message
-        raise NotImplementedError
+        verack_message = self.wait_for(VerAckMessage)
+        return verack_message
+        # raise NotImplementedError
     # tag::source4[]
 
     def send(self, message):  # <1>
